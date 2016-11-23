@@ -43,7 +43,7 @@ public:
     };
     ~KField();
     void CalFieldXYZ(Float_t x, Float_t y, Float_t z, Float_t *E);
-    TVector3 *CalFieldXYZ(Float_t x, Float_t y, Float_t z);
+    TVector3 CalFieldXYZ(Float_t x, Float_t y, Float_t z);
     Float_t CalPotXYZ(Float_t x, Float_t y, Float_t z);
     static Float_t GetFieldPoint(Float_t *, Float_t *);
     Int_t CalField();

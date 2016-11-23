@@ -126,7 +126,7 @@ Int_t KField::CalField()
     Int_t nz = U->GetNbinsZ();
 
     if (nz == 1) {
-        printf("2D field!\n");
+        //printf("2D field!\n");
         dim = 2;
     } else
         dim = 3;
@@ -389,12 +389,11 @@ TH2F *KField::Draw(Char_t *opt, Int_t b1, Int_t b2)
     return ret;
 }
 
-TVector3 *KField::CalFieldXYZ(Float_t x, Float_t y, Float_t z)
+TVector3 KField::CalFieldXYZ(Float_t x, Float_t y, Float_t z)
 {
     Float_t E[4];
     CalFieldXYZ(x, y, z, E);
-    TVector3 *vec = new TVector3(E[1], E[2], E[3]);
-    return vec;
+    return TVector3(E[1], E[2], E[3]);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

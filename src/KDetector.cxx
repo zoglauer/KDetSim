@@ -653,9 +653,11 @@ void KDetector::CalField(Int_t what)
     y8 = dvector(1, num);
     x = dvector(1, num);
     // Setting up the boundary conditions
-    printf("Setting up matrix ... \n");
+    if (Debug)
+        printf("Setting up matrix ... \n");
     Declaration(what);
-    printf("Solving matrix ...\n");
+    if (Debug)
+        printf("Solving matrix ...\n");
     // matrix solving
     for (i = 1; i <= num; i++)
         x[i] = 1.;
@@ -706,8 +708,8 @@ void KDetector::Drift(Double_t sx, Double_t sy, Double_t sz, Float_t charg, KStr
 
     Int_t st = 0;        // current step
     Int_t ishit = 0;     // local counter of the step
-    TVector3 *EE;        // Set up electric field vector
-    TVector3 *EEN;       // Set up electric field vector
+    TVector3 EE;         // Set up electric field vector
+    TVector3 EEN;        // Set up electric field vector
     TVector3 FF;         // Combined drift field
     Float_t pathlen = 0; // pathlength
     Float_t WPot;        // current ramo potential
@@ -743,7 +745,7 @@ void KDetector::Drift(Double_t sx, Double_t sy, Double_t sz, Float_t charg, KStr
     charge[st] = 0;
 
     EE = Real.CalFieldXYZ(cx, cy, cz); // Get the electric field vector
-    seg->Efield[st] = EE->Mag();       // Store the magnitude of E field
+    seg->Efield[st] = EE.Mag();        // Store the magnitude of E field
 
     //printf("%d %f : (%f %f %f)\n",st,charg,cx,cy,cz);
 
@@ -751,9 +753,9 @@ void KDetector::Drift(Double_t sx, Double_t sy, Double_t sz, Float_t charg, KStr
         //    printf("Calculate field\n");
         st++;
         if (charg > 0)
-            FF = (*EE) + muhh * EE->Cross(BB);
+            FF = EE + muhh * EE.Cross(BB);
         else
-            FF = (*EE) - muhe * EE->Cross(BB);
+            FF = EE - muhe * EE.Cross(BB);
         // "-muhe" stands for the fact that at the same
         // field the drift direction has changed due to different charge
 
@@ -776,7 +778,7 @@ void KDetector::Drift(Double_t sx, Double_t sy, Double_t sz, Float_t charg, KStr
             KMaterial::Mat = 0;
 
         EEN = Real.CalFieldXYZ(cx + deltacx, cy + deltacy, cz + deltacz); // get field & velocity at new location
-        vel = Real.DriftVelocity((EEN->Mag() + EE->Mag()) / 2, charg, Temperature, TMath::Abs(NeffF->Eval(cx, cy, cz)), MobMod());
+        vel = Real.DriftVelocity((EEN.Mag() + EE.Mag()) / 2, charg, Temperature, TMath::Abs(NeffF->Eval(cx, cy, cz)), MobMod());
 
         //      printf("Calculate vel: %e EEN = %e ::: ",vel, EEN->Mag());
         if (vel == 0) {
@@ -790,7 +792,7 @@ void KDetector::Drift(Double_t sx, Double_t sy, Double_t sz, Float_t charg, KStr
         } else if (diff) // is diffusion ON
         {
             Stime = SStep * 1e-4 / vel; // calcualte step time
-            sigma = TMath::Sqrt(2 * Kboltz * Real.Mobility(EE->Mag(), Temperature, charg, TMath::Abs(NeffF->Eval(cx, cy, cz)), MobMod()) * Temperature * Stime);
+            sigma = TMath::Sqrt(2 * Kboltz * Real.Mobility(EE.Mag(), Temperature, charg, TMath::Abs(NeffF->Eval(cx, cy, cz)), MobMod()) * Temperature * Stime);
             dify = ran->Gaus(0, sigma) * 1e4;
             difx = ran->Gaus(0, sigma) * 1e4;
             if (nz != 1)
@@ -842,7 +844,7 @@ void KDetector::Drift(Double_t sx, Double_t sy, Double_t sz, Float_t charg, KStr
         time[st] = t;
 
         EE = Real.CalFieldXYZ(cx, cy, cz);
-        seg->Efield[st] = EE->Mag();
+        seg->Efield[st] = EE.Mag();
 
         // Checking for termination of the drift ////
 
@@ -876,8 +878,6 @@ void KDetector::Drift(Double_t sx, Double_t sy, Double_t sz, Float_t charg, KStr
     (*seg).TTime = t;
     (*seg).TCharge = sumc;
     (*seg).Steps = st;
-    delete EE;
-    delete EEN;
 
     return;
 }
