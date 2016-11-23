@@ -1130,7 +1130,7 @@ void KDetector::MipIR(Int_t div, Float_t lambda)
     delete histon;
 }
 
-void KDetector::ShowMipIR(Int_t div, Int_t color, Int_t how)
+TObject *KDetector::ShowMipIR(Int_t div, Int_t color, Int_t how)
 {
     // The simulation of the drift for the minimum ionizing particles.
     // A track is devided into Int_ div buckets. Each bucket is drifted in the field. The
@@ -1145,13 +1145,17 @@ void KDetector::ShowMipIR(Int_t div, Int_t color, Int_t how)
 
     // Draw histograms
 
+    TObject *out;
     if (EG != NULL) {
-        if (nz == 1)
-            KHisProject(EG, 3, how)->Draw("COL");
-        else {
+        if (nz == 1) {
+            TH2F *hh = KHisProject(EG, 3, how);
+            hh->Draw("COL");
+            out = hh;
+        } else {
             TH3F *hh = GetGeom();
             hh->SetFillColor(color);
             hh->Draw("iso");
+            out = hh;
         }
     }
 
@@ -1201,6 +1205,8 @@ void KDetector::ShowMipIR(Int_t div, Int_t color, Int_t how)
             gr3D->Draw("SAME");
         }
     }
+
+    return out;
 }
 
 KDetector::KDetector()

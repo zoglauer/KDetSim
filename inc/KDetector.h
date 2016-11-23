@@ -142,7 +142,7 @@ public:
         exp[2] = z;
     };
     void MipIR(Int_t = 20, Float_t = 0);
-    void ShowMipIR(Int_t, Int_t = 14, Int_t = 1);
+    TObject *ShowMipIR(Int_t, Int_t = 14, Int_t = 1);
 
     void GaussBeam(Int_t, Float_t, Float_t, Float_t, Float_t, Float_t); //user manca
     void ShowGaussBeam(Int_t, Float_t, Float_t, Float_t, Int_t, Int_t); //user manca
