@@ -25,7 +25,7 @@
 #include <string.h>
 #include "TClonesArray.h"
 #include "TObjArray.h"
-#include "TRandom.h"
+#include "TRandom3.h"
 #include "TMath.h"
 #include "TLine.h"
 #include "TF3.h"
@@ -41,12 +41,12 @@ class KDetector : public KGeometry, public KMaterial
 
 private:
     Double_t Deps;
-    TRandom *ran;    //random number generator
     Double_t CalErr; //Error of the solver
     Int_t MaxIter;   //Maximum number of iterations in eq solver
     Short_t Debug;   //Print information of drift calculation etc.
 
 public:
+    TRandom3 *ran;    //random number generator
     Float_t Voltage;  //Voltage
     Float_t Voltage2; //Voltage2
     TArrayF Voltages; //Array of voltages
@@ -89,8 +89,9 @@ public:
     //Configuration functions
     void ResetRnd(Int_t seed)
     {
-        delete ran;
-        ran = new TRandom(seed);
+        if (ran)
+            delete ran;
+        ran = new TRandom3(seed);
     }; // reset the random generator
     void SetDriftHisto(Float_t x, Int_t = 200);
     void SetCalculationParameters(Double_t x, Int_t y)

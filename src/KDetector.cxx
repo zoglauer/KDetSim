@@ -1226,7 +1226,7 @@ KDetector::KDetector()
         B[i] = 0;
 
     // setting up default random generator - diffusion
-    ran = new TRandom(33);
+    ran = new TRandom3(33);
 
     // Calculation parameters
     CalErr = 1e-6;
