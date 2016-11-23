@@ -99,8 +99,12 @@ void KStruct::GetCH(TH1F *histo, Int_t Update, Float_t Mult, Float_t tau)
     if (Update) {
         his->Scale(Mult);
         histo->Add(his);
-    } else
-        his->Copy(*histo);
+    } else {
+        if (histo)
+            delete histo;
+
+        histo = (TH1F *)histo->Clone("CHGet");
+    }
 
     delete his;
     delete[] ti; // Changed when migrating from 2.23 to 2.25
@@ -152,8 +156,12 @@ Float_t KStruct::GetCHMult(TH1F *histo, Int_t Update, Float_t Mult, Float_t tau)
     if (Update) {
         his->Scale(Mult);
         histo->Add(his);
-    } else
-        his->Copy(*histo);
+    } else {
+        if (histo)
+            delete histo;
+
+        histo = (TH1F *)histo->Clone("CHMult");
+    }
 
     delete his;
     delete[] ti;    // Changed when migrating from 2.23 to 2.25

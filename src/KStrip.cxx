@@ -70,8 +70,8 @@ void KStrip::SetUpVolume(Float_t StS, Float_t StE, Int_t Num)
     DM->GetXaxis()->SetTitle("x [#mum]");
     DM->GetYaxis()->SetTitle("y [#mum]");
 
-    delete Xbins;
-    delete Ybins;
+    delete[] Xbins;
+    delete[] Ybins;
 }
 
 void KStrip::SetUpVolume(Float_t St1, Float_t St2)

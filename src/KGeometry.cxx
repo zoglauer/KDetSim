@@ -41,8 +41,7 @@ void KGeometry::GetGrid(TH3I *x, Short_t which)
     case 0:
         if (EG != NULL)
             delete EG;
-        EG = new TH3I();
-        x->Copy(*EG);
+        EG = (TH3I *)x->Clone("EG");
         nx = EG->GetNbinsX();
         ny = EG->GetNbinsY();
         nz = EG->GetNbinsZ();
@@ -50,8 +49,7 @@ void KGeometry::GetGrid(TH3I *x, Short_t which)
     case 1:
         if (DM != NULL)
             delete DM;
-        DM = new TH3I();
-        x->Copy(*DM);
+        DM = (TH3I *)x->Clone("DM");
         break;
     }
 
@@ -175,6 +173,7 @@ TH3F *KGeometry::MapToGeometry(Double_t *x, Double_t Scale)
 {
     TH3F *fhis = new TH3F();
     EG->Copy(*fhis);
+    fhis->SetName("GeometryMap");
     fhis->Reset();
 
     // Map the array of values: E, U, W ... to the geometry.
@@ -470,6 +469,7 @@ TH3F *KGeometry::GetGeom()
     int i, j, k, n, bin, col;
     TH3F *dhis = new TH3F();
     EG->Copy(*dhis);
+    dhis->SetName("GetGeom");
 
     for (k = 1; k <= nz; k++)
         for (j = 1; j <= ny; j++)

@@ -666,10 +666,12 @@ void KDetector::CalField(Int_t what)
     // Calculating the field
     if (!what) {
         Real.U = MapToGeometry(x);
+        Real.U->SetName("RealU");
         Real.CalField();
     } else {
         // Scale back to 1 from 1000 when storing the potential
         Ramo.U = MapToGeometry(x, 1e-4);
+        Ramo.U->SetName("RamoU");
 
         Ramo.CalField();
     }

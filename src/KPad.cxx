@@ -171,6 +171,7 @@ void KPad::GetRamoField()
         for (i = 1; i <= nx; i++)
             x[i + (j - 1) * nx] = (Double_t)(j - 1) / (Double_t)(ny - 1);
     Ramo.U = MapToGeometry(x);
+    Ramo.U->SetName("RamoU");
     Ramo.CalField();
     delete[] x;
 }
@@ -187,6 +188,7 @@ void KPad::GetRamoField(TH1F *rf)
             x[i + (j - 1) * nx] = rf->GetBinContent(j);
 
     Ramo.U = MapToGeometry(x);
+    Ramo.U->SetName("RamoU");
     Ramo.CalField();
     delete[] x;
 }
@@ -215,6 +217,7 @@ void KPad::GetField()
     // for(i=0;i<nx*ny+1;i++)     {printf("%f ",PhyPot2D[i]); if(i%nx==0) printf("\n");}
 
     Real.U = MapToGeometry(x);
+    Real.U->SetName("RealU");
     Real.CalField();
     delete[] x;
 }
@@ -231,6 +234,7 @@ void KPad::GetField(TH1F *rf)
             x[i + (j - 1) * nx] = rf->GetBinContent(j);
     PhyPot[j - 1] = rf->GetBinContent(j);
     Real.U = MapToGeometry(x);
+    Real.U->SetName("RealU");
     Real.CalField();
     delete[] x;
 }
@@ -247,6 +251,7 @@ void KPad::GetField(TF1 *rf)
             x[i + (j - 1) * nx] = rf->Eval(EG->GetXaxis()->GetBinCenter(j));
     PhyPot[j - 1] = rf->Eval(EG->GetXaxis()->GetBinCenter(j));
     Real.U = MapToGeometry(x);
+    Real.U->SetName("RealU");
     Real.CalField();
     delete[] x;
 }
