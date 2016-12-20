@@ -1,24 +1,17 @@
 # CMakeLists.txt for KDetSim
-cmake_minimum_required(VERSION 3.0 FATAL_ERROR)
-project(KDetSim)
+cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
 
-# Set ROOT path and try to autodetect it from ENV
-set(ROOTSYS $ENV{ROOTSYS} CACHE STRING "ROOT path")
+set(CMAKE_MODULE_PATH
+    ${CMAKE_SOURCE_DIR}/config
+)
 
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX "${ROOTSYS}" CACHE PATH "default install path" FORCE)
-endif()
+include(ParseVersion)
 
-# You need to tell CMake where to find the ROOT installation. This can be done in a number of ways:
-#   - ROOT built with classic configure/make use the provided $ROOTSYS/etc/cmake/FindROOT.cmake
-#   - ROOT built with CMake. Add in CMAKE_PREFIX_PATH the installation prefix for ROOT
-list(APPEND CMAKE_PREFIX_PATH ${ROOTSYS})
+project(KDetSim VERSION ${KDETSIM_VERSION})
 
-#---Locate the ROOT package and defines a number of variables (e.g. ROOT_INCLUDE_DIRS)
-find_package(ROOT REQUIRED)
-
-#---Define useful ROOT functions and macros (e.g. ROOT_GENERATE_DICTIONARY)
-include(${ROOT_USE_FILE})
+INCLUDE(GNUInstallDirs)
+include(CompilerConfig)
+include(ROOT)
 
 #---Define includes
 include_directories(inc)
@@ -67,11 +60,11 @@ ROOT_GENERATE_DICTIONARY(
     MODULE ${PROJECT_NAME}
     LINKDEF inc/KDetSim_LinkDef.h
 )
+set(Project_Sources ${Project_Sources} G__${PROJECT_NAME}.cxx)
 
 #---Create a shared library with geneated dictionary
 add_library(${PROJECT_NAME} SHARED
     ${Project_Sources}
-    G__${PROJECT_NAME}.cxx
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
@@ -79,13 +72,17 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 
 target_link_libraries(${PROJECT_NAME} ${ROOT_LIBRARIES})
 
-install(TARGETS ${PROJECT_NAME}
-    LIBRARY DESTINATION lib
-    INCLUDES DESTINATION include/${PROJECT_NAME}
-    PUBLIC_HEADER DESTINATION include/${PROJECT_NAME}
+#---Install
+install(TARGETS ${PROJECT_NAME} EXPORT KDetSimTargets
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    INCLUDES DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
 )
 install(FILES
     ${CMAKE_BINARY_DIR}/lib${PROJECT_NAME}_rdict.pcm
     ${CMAKE_BINARY_DIR}/lib${PROJECT_NAME}.rootmap
-    DESTINATION lib
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
+
+include(Package)
