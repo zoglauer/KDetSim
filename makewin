@@ -6,7 +6,7 @@ DllSuf        = dll
 IncSuf        = h
 OutPutOpt     = /out:
  
-SISDET        = C:\KDetSim
+SISDET        = C:\Users\gregor\Delo\KDetSim
 OBJDIR        = $(SISDET)\obj
 SRCDIR        = $(SISDET)\src
 INCDIR        = $(SISDET)\inc
