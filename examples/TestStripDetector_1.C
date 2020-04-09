@@ -12,14 +12,14 @@
     //det->SetUpMaterial(10); //diamond
 
     det->NeffF = f2;
-    // det.Mat=10;
-    det.SetDebug(0);
-    det.CalField(0);
-    det.CalField(1);
+    // det->Mat=10;
+    det->SetDebug(0);
+    det->CalField(0);
+    det->CalField(1);
 
     det->SetEntryPoint(100, 1, 0.5);
     det->SetExitPoint(110, 300, 0.5);
 
-    det.diff = 1;
+    det->diff = 1;
     det->ShowMipIR(20);
 }

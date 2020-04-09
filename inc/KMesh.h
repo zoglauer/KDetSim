@@ -3,6 +3,11 @@
 
 #ifndef _KMesh
 #define _KMesh
+#ifdef MSVC
+#  define EXPORT __declspec(dllexport)
+#else
+#  define EXPORT
+#endif
 
 #include "TMath.h"
 
@@ -14,7 +19,7 @@
 //                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
-class KMesh
+class EXPORT KMesh
 {
 
 private:

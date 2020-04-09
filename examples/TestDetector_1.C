@@ -40,11 +40,11 @@
     Float_t BackSiz[3] = {119.1, 30, 0.1};
     det.ElRectangle(BackPos, BackSiz, 1, 0);
 
-    det->SetBoundaryConditions();
-    det->CalField(0);
-    det->CalField(1);
+    det.SetBoundaryConditions();
+    det.CalField(0);
+    det.CalField(1);
 
-    det->SetEntryPoint(110, 250, 1);
-    det->SetExitPoint(120, 250, 49);
-    det->ShowMipIR(20);
+    det.SetEntryPoint(110, 250, 1);
+    det.SetExitPoint(120, 250, 49);
+    det.ShowMipIR(20);
 }

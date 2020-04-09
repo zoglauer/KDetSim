@@ -10,7 +10,7 @@
     det.EG->GetXaxis()->SetTitle("x [#mum]");
     det.EG->GetYaxis()->SetTitle("y [#mum]");
     det.EG->GetZaxis()->SetTitle("z [#mum]");
-    det->GetGrid(det.EG, 1);
+    det.GetGrid(det.EG, 1);
 
     det.Voltage = 100;
     TF3 *f2 = new TF3("f2", "x[0]*x[1]*x[2]*0+[0]", 0, 3000, 0, 3000, 0, 3000);
@@ -38,18 +38,18 @@
     det.ElLine(P4, P6, W, 2, 1);
     det.ElLine(P5, P6, W, 2, 1);
 
-    det->ElCylinder(P7, 10, 50, 3, 16385, 2);
-    det->ElCylinder(P7, 8, 50, 3, 16385, 1);
+    det.ElCylinder(P7, 10, 50, 3, 16385, 2);
+    det.ElCylinder(P7, 8, 50, 3, 16385, 1);
 
-    det->SetBoundaryConditions();
+    det.SetBoundaryConditions();
 
     det.CalField(0);
     det.CalField(1);
 
-    det->enp[0] = 40;
-    det->enp[1] = 100;
-    det->enp[2] = 1;
-    det->exp[0] = 40;
-    det->exp[1] = 90;
-    det->exp[2] = 100;
+    det.enp[0] = 40;
+    det.enp[1] = 100;
+    det.enp[2] = 1;
+    det.exp[0] = 40;
+    det.exp[1] = 90;
+    det.exp[2] = 100;
 }

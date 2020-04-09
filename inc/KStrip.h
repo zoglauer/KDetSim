@@ -3,6 +3,11 @@
 
 #ifndef _KStrip
 #define _KStrip
+#ifdef MSVC
+#  define EXPORT __declspec(dllexport)
+#else
+#  define EXPORT
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -14,7 +19,7 @@
 
 #include "KDetector.h"
 
-class KStrip : public KDetector
+class EXPORT KStrip : public KDetector
 {
 
 private:

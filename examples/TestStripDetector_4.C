@@ -53,7 +53,7 @@
     det->NeffF = f3;
 
     det->SetCalculationParameters(1e-6, 25000);
-    det.CalField(0);
+    det->CalField(0);
     det->SetCalculationParameters(1e-6, 2000);
-    det.CalField(1);
+    det->CalField(1);
 }

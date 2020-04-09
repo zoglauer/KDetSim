@@ -1,6 +1,10 @@
 #ifndef _K3D
 #define _K3D
-
+#ifdef MSVC
+#  define EXPORT __declspec(dllexport)
+#else
+#  define EXPORT
+#endif
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
 // K3D                                                                  //
@@ -21,7 +25,7 @@
 #include "TMinuit.h"
 #include "KDetector.h"
 
-class K3D : public KDetector
+class EXPORT K3D : public KDetector
 {
 
 private:

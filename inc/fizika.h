@@ -18,7 +18,7 @@ static double perm0 = 8.854187817e-12; // F/m
 static double perm = 11.7;
 static double permDi = 5.7;
 static double Nd = 1e20; // atoms/m^3
-static double mh = ME * 0.558;
+static double mh = ME * 0.558;       // for calculation of density of states
 static double me = ME * 1.08;       //ev/C^2
 static double SIgap = 1.12;         //eV
 static double Clight = 299792458;   //m/s
@@ -26,7 +26,7 @@ static double hbar = 6.5821220e-22; //MeV s
 static double hbarc = 197.327053;   //MeV fm
 static double Ro = 100;             //ohm m
 
-#define MAXPOINT 3001
+#define MAXPOINT 10001
 struct sled {
     float pos[MAXPOINT];
     float neg[MAXPOINT];

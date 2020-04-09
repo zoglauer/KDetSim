@@ -20,12 +20,12 @@
 
     det->NeffF = f3;
 
-    det.CalField(0);
-    // det.CalField(1);
-    /* det.enp[0]=60; */
-    /*  det.enp[1]=1; */
-    /*  det.exp[0]=60; */
-    /*  det.exp[1]=300; */
-    /*  det.exp[2]=0; */
-    /*  det.enp[2]=0; */
+    det->CalField(0);
+    // det->CalField(1);
+    /* det->enp[0]=60; */
+    /*  det->enp[1]=1; */
+    /*  det->exp[0]=60; */
+    /*  det->exp[1]=300; */
+    /*  det->exp[2]=0; */
+    /*  det->enp[2]=0; */
 }

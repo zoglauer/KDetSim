@@ -43,7 +43,7 @@ Double_t KM(TH1D *his, Float_t Start, Short_t Rev)
     return (TMath::Exp(I1) / (1 - I2));
 }
 
-Double_t KAlpha(Double_t E, Short_t Charg, Int_t which)
+Double_t KAlpha(Double_t E, Double_t T, Short_t Charg, Int_t which)
 {
     // Function calculates impact ionization coefficientf
     // for a given E [V/um].
@@ -55,14 +55,35 @@ Double_t KAlpha(Double_t E, Short_t Charg, Int_t which)
     //                 ---> 12 -> diamond Hiraiwa parametrization
 
     Double_t alp, A, B, a = TMath::Sqrt(10), b = TMath::Sqrt(10);
-
     switch (which) {
-    case 0: //
+    case 0: // R.J. R.J. McIntyre, IEEE Trans. Electron Dev. 46 (8) (1999).
         if (Charg > 0)
             alp = 1.3e-3 * TMath::Exp(-13.2 * (2e7 / (E * 1e6) - 1));
         else
             alp = 2.3e-1 * TMath::Exp(-6.78 * (2e7 / (E * 1e6) - 1));
         break;
+    case 1: // Van Oversraeten model Solid-State Electronics 1970 
+        if (Charg > 0)
+	  if(E<40)
+	    alp = 158.2 * TMath::Exp(-203.6/E);
+            else
+	    alp = 67.1 * TMath::Exp(-169.6/E);
+        else
+            alp = 70.3 * TMath::Exp(-123.1/E);
+        break; 
+    case 2: // Temperature dependence of the impact ionization - Massey
+            // D.J Massey et al., Temperature Dependence of Impact Ionization in Submicrometer Silicon Devices,
+            // IEEE Transactions on Electron Devices, vol. 53, no. 9, September 2006.
+        if (Charg > 0)
+   	    alp = 113 * TMath::Exp(-(171+0.109*T)/E);
+	    else
+            alp = 44.3 * TMath::Exp(-(96.6+0.0499*T)/E);
+        break;
+    case 3: // Chynoweth original 1958 silicon
+      break;
+      //
+
+	
     case 10:
         // Trew parametrization
         A = 1.935e4;
@@ -137,6 +158,68 @@ Float_t KMaterial::Perm(Int_t Material)
     }
     return perm;
 }
+
+Float_t KMaterial::EmeC(Int_t Material)
+{
+   Float_t emec;
+    switch (Material) {
+    case 0:
+        emec = 0.26;
+        break; //silicon
+    case 1:
+        emec = 0.26;
+        break; //poly silicon
+    case 2:
+        emec = 0.26;
+        break; //silicon oxide 2.648
+    case 10:
+        emec = 1;
+        break; //diamond
+    case 20:
+        emec = 1;
+        break; //air
+    case 100:
+        emec = 1;
+        break; //aluminium
+    default:
+        emec = 1;
+        break;
+    }
+    return emec; 
+}
+
+
+Float_t KMaterial::EmhC(Int_t Material)
+{
+   Float_t emhc;
+    switch (Material) {
+    case 0:
+        emhc = 0.37; //average
+        break; //silicon
+    case 1:
+        emhc = 0.37;
+        break; //poly silicon
+    case 2:
+        emhc = 0.37;
+        break; //silicon oxide 2.648
+    case 10:
+        emhc = 1;
+        break; //diamond
+    case 20:
+        emhc = 1;
+        break; //air
+    case 100:
+        emhc = 1;
+        break; //aluminium
+    default:
+        emhc = 1;
+        break;
+    }
+    return emhc; 
+}
+
+
+
 
 Int_t KMaterial::MobMod()
 {

@@ -131,7 +131,7 @@
 
         //define it in EG histogram
         if (logicConnected)
-            det.ElRectangle(LogicPos, LogicSiz, det->SetElecVolt(0), 0);
+            det.ElRectangle(LogicPos, LogicSiz, det.SetElecVolt(0), 0);
         // bit 15 defines the second high voltage - voltage2 variable
         // (that is logic at different votlage than GND)
     }
@@ -140,7 +140,7 @@
     //SETTING UP THE MATERIAL AND NEFF                                                    //
     ////////////////////////////////////////////////////////////////////////////////////////
 
-    // det->DM->SetBinContent(x,y,z,materialType); materialType: 0: Si, 2: SiO2, 100: Al
+    // det.DM->SetBinContent(x,y,z,materialType); materialType: 0: Si, 2: SiO2, 100: Al
     for (int j = 0; j <= det.ny / meshSize; j++)
         for (int i = 0; i <= det.nx / meshSize; i++) {
             // if outside detector = air
@@ -148,22 +148,22 @@
             //      	if(i>=200 && j>=100 && j<=300)
 
             if (j <= substrateThickness / meshSize) {
-                det->DM->SetBinContent(i, j, 1, 0);
-                det->NeffH->SetBinContent(i, j, 1, -20); //(-20 is negative space charge of concentration 2e13)
+                det.DM->SetBinContent(i, j, 1, 0);
+                det.NeffH->SetBinContent(i, j, 1, -20); //(-20 is negative space charge of concentration 2e13)
             }
 
             if ((j > substrateThickness / meshSize && j < substrateThickness / meshSize + BOXthickness) || j == 2) {
-                det->DM->SetBinContent(i, j, 1, 2);
-                det->NeffH->SetBinContent(i, j, 1, oxideCharge);
+                det.DM->SetBinContent(i, j, 1, 2);
+                det.NeffH->SetBinContent(i, j, 1, oxideCharge);
             }
 
             if (j == 1)
-                det->DM->SetBinContent(i, j, 1, 100);
+                det.DM->SetBinContent(i, j, 1, 100);
 
             // Negative space charge under BOX
             if ((j <= substrateThickness / meshSize) && (j >= substrateThickness / meshSize))
                 if (EG->GetBinContent(i, substrateThickness / meshSize, 1) == 0) {
-                    det->NeffH->SetBinContent(i, j, 1, accumulationCharge);
+                    det.NeffH->SetBinContent(i, j, 1, accumulationCharge);
                 }
         }
 
@@ -177,9 +177,9 @@
     det.Mobility = 1; // select mobility model; 1=Canali
     det.diff = 1;     // switch on diffusion of free carries
 
-    det->SetBoundaryConditions(); // calculate  boundary condition for the simulated volume
-    det->CalField(0);             // calculate  electric field
-    det->CalField(1);             // calculate  ramo (weighting) field
+    det.SetBoundaryConditions(); // calculate  boundary condition for the simulated volume
+    det.CalField(0);             // calculate  electric field
+    det.CalField(1);             // calculate  ramo (weighting) field
 
     //
     // Check depletion region
@@ -202,10 +202,10 @@
 	for(int iy=0; iy < (hEFY->GetBinCenter(i)+1e4/voltage1**2)/meshSize; iy++)
 	  for(int ix=0;ix<=3*stripPitch/meshSize;ix++) 
 	  {
-	    det->NeffH->SetBinContent(ix,iy,1,0);			// Set Neff to zero in the undepleted region (+ extra bins in y is a correction factor)
+	    det.NeffH->SetBinContent(ix,iy,1,0);			// Set Neff to zero in the undepleted region (+ extra bins in y is a correction factor)
 	  }
 	  
-	det->CalField(0);						// Calculate E-field again
+	det.CalField(0);						// Calculate E-field again
 	TH1 *hEFY = det.Draw("EFY",0)->ProjectionY();		// Get Electric field profile in y
 	hEFY->GetXaxis()->SetRangeUser(0,substrateThickness);
 	      
@@ -236,7 +236,7 @@
 	  det.Voltage = voltage1;	  
 	}
 	cout << voltage1 << endl;	
-	det->CalField(0);
+	det.CalField(0);
 	TH1 *hEFY = det.Draw("EFY",0)->ProjectionY();		// Get Electric field profile in y
 	hEFY->GetXaxis()->SetRangeUser(0,substrateThickness);
       }
@@ -254,9 +254,9 @@
 
             for (int iy = 0; iy < (hEFY->GetBinCenter(i) + 1e4 / voltage1 * *2) / meshSize; iy++)
                 for (int ix = 0; ix <= 3 * stripPitch / meshSize; ix++)
-                    det->NeffH->SetBinContent(ix, iy, 1, 0); // Set Neff to zero in the undepleted region (+ extra bins in y is a correction factor)
+                    det.NeffH->SetBinContent(ix, iy, 1, 0); // Set Neff to zero in the undepleted region (+ extra bins in y is a correction factor)
 
-            det->CalField(0);                              // Calculate E-field again
+            det.CalField(0);                              // Calculate E-field again
             TH1 *hEFY = det.Draw("EFY", 0)->ProjectionY(); // Get Electric field profile in y
             hEFY->GetXaxis()->SetRangeUser(0, substrateThickness);
 
@@ -274,7 +274,7 @@
                     det.Voltage = voltage1;
                 }
                 cout << voltage1 << endl;
-                det->CalField(0);
+                det.CalField(0);
                 TH1 *hEFY = det.Draw("EFY", 0)->ProjectionY(); // Get Electric field profile in y
                 hEFY->GetXaxis()->SetRangeUser(0, substrateThickness);
             }
@@ -300,7 +300,7 @@
 	      
 	for(int iy=0; iy < (hEFY->GetBinCenter(i))/meshSize; iy++)
 	  for(int ix=0;ix<=3*stripPitch/meshSize;ix++) 
-	    det->NeffH->SetBinContent(ix,iy,1,0);
+	    det.NeffH->SetBinContent(ix,iy,1,0);
 	
 	  
 	  
@@ -308,17 +308,17 @@
       }  
     }
   
-    det->CalField(0);
-    //det->CalField(1);
+    det.CalField(0);
+    //det.CalField(1);
   
     TH1 *hEFY = det.Draw("EFY",0)->ProjectionY();
     hEFY->GetXaxis()->SetRangeUser(0,substrateThickness);
     
   }*/
 
-    det->SetEntryPoint(entryPointX, entryPointY, 0);
-    det->SetExitPoint(entryPointX, entryPointY + 1, 1);
-    det->MipIR(100);
+    det.SetEntryPoint(entryPointX, entryPointY, 0);
+    det.SetExitPoint(entryPointX, entryPointY + 1, 1);
+    det.MipIR(100);
     //det.GaussBeamZ(50,1.064,4,det.nx/meshSize,0,101); // noZ make with absorption 100 //GaussBeam(Int_t div, Float_t Lambda, Float_t w0, Float_t CellX, Float_t B, Float_t lambda)
     //TCanvas *c2 = new TCanvas("c2","c2", 0,600,700,500);
     //det.ShowGaussBeam(140,1.064,4,det.nx/meshSize,14,1);//ShowGaussBeam(Int_t div, Float_t Lambda, Float_t w0, Float_t CellX, Int_t color,Int_t how); // draw for xy case
@@ -328,10 +328,10 @@
     det.sum.Reset();
     det.sum.Add(det.neg);
     det.sum.Add(det.pos);
-    det->sum.Draw();
+    det.sum.Draw();
 
-    //det->pos.Draw("SAME");
-    //det->neg.Draw("SAME");
+    //det.pos.Draw("SAME");
+    //det.neg.Draw("SAME");
 
     cout << det.sum->Integral() << endl;
     ;
@@ -350,9 +350,9 @@
                 if (iy == 5 && ix % 25 == 0)
                     cout << ix << endl;
                 ;
-                det->SetEntryPoint(ix, iy, 0);
-                det->SetExitPoint(ix, iy + 1, 1);
-                det->MipIR(100);
+                det.SetEntryPoint(ix, iy, 0);
+                det.SetExitPoint(ix, iy + 1, 1);
+                det.MipIR(100);
 
                 int iBinX = hCCE->GetXaxis()->FindBin(ix);
                 int iBinY = hCCE->GetYaxis()->FindBin(iy);

@@ -23,7 +23,7 @@
 
     //define the space charge
     TF3 *f2 = new TF3("f2", "x[0]*x[1]*x[2]*0+[0]", 0, 3000, 0, 3000, 0, 3000);
-    f2->SetParameter(0, -2);
+    f2->SetParameter(0, -5);
     det->NeffF = f2;
 
     // calculate weigting field
@@ -45,15 +45,15 @@
     // Show mip track
     TCanvas c1;
     c1.cd();
-    det.ShowMipIR(30);
+    det->ShowMipIR(30);
     // Show electric potential
     TCanvas c2;
     c2.cd();
-    det.Draw("EPxy", 99).Draw("COLZ");
+    det->Draw("EPxy", 99).Draw("COLZ");
     // calcualte induced current
     TCanvas c3;
     c3.cd();
-    det.MipIR(100);
+    det->MipIR(100);
     det->sum.Draw();
     det->neg.Draw("SAME");
     det->pos.Draw("SAME");

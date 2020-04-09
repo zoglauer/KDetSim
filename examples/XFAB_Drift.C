@@ -134,7 +134,7 @@
 
         //define it in EG histogram
         if (logicConnected)
-            det.ElRectangle(LogicPos, LogicSiz, det->SetElecVolt(0), 0);
+            det.ElRectangle(LogicPos, LogicSiz, det.SetElecVolt(0), 0);
         // bit 15 defines the second high voltage - voltage2 variable
         // (that is logic at different votlage than GND)
     }
@@ -143,7 +143,7 @@
     //SETTING UP THE MATERIAL AND NEFF                                                    //
     ////////////////////////////////////////////////////////////////////////////////////////
 
-    // det->DM->SetBinContent(x,y,z,materialType); materialType: 0: Si, 2: SiO2, 100: Al
+    // det.DM->SetBinContent(x,y,z,materialType); materialType: 0: Si, 2: SiO2, 100: Al
     for (int j = 0; j <= det.ny; j++)
         for (int i = 0; i <= det.nx; i++) {
             // if outside detector = air
@@ -151,22 +151,22 @@
             //      	if(i>=200 && j>=100 && j<=300)
 
             if (j <= substrateThickness) {
-                det->DM->SetBinContent(i, j, 1, 0);
-                det->NeffH->SetBinContent(i, j, 1, -20); //(-20 is negative space charge of concentration 2e13)
+                det.DM->SetBinContent(i, j, 1, 0);
+                det.NeffH->SetBinContent(i, j, 1, -20); //(-20 is negative space charge of concentration 2e13)
             }
 
             if ((j > substrateThickness && j < substrateThickness + BOXthickness) || j == 2) {
-                det->DM->SetBinContent(i, j, 1, 2);
-                det->NeffH->SetBinContent(i, j, 1, oxideCharge);
+                det.DM->SetBinContent(i, j, 1, 2);
+                det.NeffH->SetBinContent(i, j, 1, oxideCharge);
             }
 
             if (j == 1)
-                det->DM->SetBinContent(i, j, 1, 100);
+                det.DM->SetBinContent(i, j, 1, 100);
 
             // Negative space charge under BOX
             if ((j <= substrateThickness) && (j >= substrateThickness))
                 if (EG->GetBinContent(i, substrateThickness, 1) == 0) {
-                    det->NeffH->SetBinContent(i, j, 1, accumulationCharge);
+                    det.NeffH->SetBinContent(i, j, 1, accumulationCharge);
                 }
         }
 
@@ -180,19 +180,19 @@
     det.Mobility = 1; // select mobility model; 1=Canali
     det.diff = 1;     // switch on diffusion of free carries
 
-    det->SetBoundaryConditions(); // calculate  boundary condition for the simulated volume
-    det->CalField(0);             // calculate  electric field
-    det->CalField(1);             // calculate  ramo (weighting) field
+    det.SetBoundaryConditions(); // calculate  boundary condition for the simulated volume
+    det.CalField(0);             // calculate  electric field
+    det.CalField(1);             // calculate  ramo (weighting) field
 
-    det->SetEntryPoint(entryPointX, entryPointY, 0);    // define entry point of the track
-    det->SetExitPoint(entryPointX, entryPointY + 1, 1); // define exit point of teh track
-    det->MipIR(100);                                    // split the track into 100 segments = charge buckets and perform the simulation of the drift
+    det.SetEntryPoint(entryPointX, entryPointY, 0);    // define entry point of the track
+    det.SetExitPoint(entryPointX, entryPointY + 1, 1); // define exit point of teh track
+    det.MipIR(100);                                    // split the track into 100 segments = charge buckets and perform the simulation of the drift
 
     TCanvas *c1 = new TCanvas("c1", "c1", 1);
 
-    det->sum.Draw();       // draw the induced current
-    det->neg.Draw("SAME"); // component from the drift of electrons
-    det->pos.Draw("SAME"); // component from the drift of holes
+    det.sum.Draw();       // draw the induced current
+    det.neg.Draw("SAME"); // component from the drift of electrons
+    det.pos.Draw("SAME"); // component from the drift of holes
                            // The integral of these histograms gives the charge in
                            // terms of number of charge buckets - so for 100 buckets you should
                            // get in ideal detector 100 (+/- depending on the polarity of the pulses)

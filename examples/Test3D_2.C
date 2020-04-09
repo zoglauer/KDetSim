@@ -32,13 +32,13 @@
     //   det->Save("DD3D","tempp.root");
     TCanvas c1;
     c1.cd();
-    det.ShowMipIR(30);
+    det->ShowMipIR(30);
     TCanvas c2;
     c2.cd();
-    det.Draw("EPxy", 99).Draw("COLZ");
+    det->Draw("EPxy", 99).Draw("COLZ");
     TCanvas c3;
     c3.cd();
-    det.MipIR(100);
+    det->MipIR(100);
     det->sum.Draw();
     det->neg.Draw("SAME");
     det->pos.Draw("SAME");

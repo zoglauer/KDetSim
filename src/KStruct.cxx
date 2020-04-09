@@ -125,9 +125,9 @@ Float_t KStruct::GetCHMult(TH1F *histo, Int_t Update, Float_t Mult, Float_t tau)
 
     for (i = 1; i < Steps + 1; i++) {
         if (PCharge < 0)
-            dif = KAlpha(0.5 * (Efield[i + 1] + Efield[i]), -1, KMaterial::ImpactIonization);
+	  dif = KAlpha(0.5 * (Efield[i + 1] + Efield[i]), KMaterial::Temperature, -1, KMaterial::ImpactIonization);
         else
-            dif = KAlpha(0.5 * (Efield[i + 1] + Efield[i]), 1, KMaterial::ImpactIonization);
+	  dif = KAlpha(0.5 * (Efield[i + 1] + Efield[i]), KMaterial::Temperature, 1, KMaterial::ImpactIonization);
 
         dift = Time[i + 1] - Time[i];
         dx = TMath::Sqrt(TMath::Power((Xtrack[i + 1] - Xtrack[i]), 2) + TMath::Power((Ytrack[i + 1] - Ytrack[i]), 2));

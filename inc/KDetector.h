@@ -1,6 +1,10 @@
 #ifndef _KDetector
 #define _KDetector
-
+#ifdef MSVC
+#  define EXPORT __declspec(dllexport)
+#else
+#  define EXPORT
+#endif
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
 // KDetector                                                            //
@@ -10,6 +14,7 @@
 // F(x_{#frac{1}{2}}) = #prod(x < x_{#frac{1}{2}}) = #frac{1}{2}        //
 // END_LATEX                                                            //
 //////////////////////////////////////////////////////////////////////////
+
 
 #include "TMath.h"
 #include "fizika.h"
@@ -36,133 +41,107 @@
 #include "KField.h"
 #include "TVector3.h"
 
-class KDetector : public KGeometry, public KMaterial
-{
+class EXPORT KDetector : public KGeometry, public KMaterial {
 
 private:
-    Double_t Deps;
-    TRandom *ran;    //random number generator
-    Double_t CalErr; //Error of the solver
-    Int_t MaxIter;   //Maximum number of iterations in eq solver
-    Short_t Debug;   //Print information of drift calculation etc.
+  Double_t Deps;
+  TRandom *ran;               //random number generator
+  Double_t CalErr;               //Error of the solver
+  Int_t MaxIter;              //Maximum number of iterations in eq solver
+  Short_t Debug;              //Print information of drift calculation etc.
 
 public:
-    Float_t Voltage;  //Voltage
-    Float_t Voltage2; //Voltage2
-    TArrayF Voltages; //Array of voltages
+  Float_t Voltage;  //Voltage
+  Float_t Voltage2; //Voltage2 
+  TArrayF Voltages; //Array of voltages
 
-    // Definition of space charge
-    TF3 *NeffF;  //effective dopping concentration function
-    TH3F *NeffH; //effective dopping concentration histogram
+  // Definition of space charge 
+  TF3     *NeffF;     //effective dopping concentration function
+  TH3F    *NeffH;     //effective dopping concentration histogram
 
-    // Weigthing, electric and magnetic field
-    KField Ramo;  // ramo field
-    KField Real;  // electric field
-    Float_t B[3]; // magnetic field
+  // Weigthing, electric and magnetic field
+  KField *Ramo;       // ramo field 
+  KField *Real;       // electric field
+  Float_t B[3];      // magnetic field
 
-    // Trapping and variables used for multiplication studies
-    Float_t taue; // effective trapping time constants - used if Multiplication is ON
-    Float_t tauh; // effective trapping time constants - used if Multiplication is ON
+  // Trapping and variables used for multiplication studies
+  Float_t taue;      // effective trapping time constants 
+  Float_t tauh;      // effective trapping time constants 
+  TF3 *TauE;         // Function of TauE(x,y,z);
+  TF3 *TauH;         // Function of TauH(x,y,z);
 
-    Int_t BreakDown; // if break down occurs it goes to 1 otherwise is 0
-    Float_t MTresh;  // treshold for taking multiplication into account
-    Float_t BDTresh; // hole multiplication - break down treshold
+  Int_t BreakDown;     // if break down occurs it goes to 1 otherwise is 0
+  Float_t MTresh;      // treshold for taking multiplication into account
+  Float_t BDTresh;     // hole multiplication - break down treshold 
+  Float_t DiffOffField;// electric field where diffusion is switched off [V/um] !!
+  // Drift parameters
 
-    // Drift parameters
+  Float_t enp[3];      //entry point for the charge drift
+  Float_t exp[3];      //exit point for the cahrge drift
+  Int_t diff;          // Diffusion simulation (yes=1, no=0)
+  Int_t average;       // Average (over how many events)
+  Float_t SStep;       // Simulation step size;
+  Float_t MaxDriftLen; // Maximum drift lenght before stopping the drift
 
-    Float_t enp[3]; //entry point for the charge drift
-    Float_t exp[3]; //exit point for the cahrge drift
-    Int_t diff;     // Diffusion simulation (yes=1, no=0)
-    Int_t average;  // Average (over how many events)
-    Float_t SStep;  // Simulation step size;
+  // Output histograms
+  TH1F *pos;           // contribution of the holes to the total drift current
+  TH1F *neg;           // contribution of the electrons  to the total drift current
+  TH1F *sum;	       // total drift current
 
-    // Output histograms
-    TH1F *pos; // contribution of the holes to the total drift current
-    TH1F *neg; // contribution of the electrons  to the total drift current
-    TH1F *sum; // total drift current
+  // Constructors and destructor
+  KDetector();
+  ~KDetector();
+  //_______________________________________________________________________________
 
-    // Constructors and destructor
-    KDetector();
-    ~KDetector();
-    //_______________________________________________________________________________
 
-    //Configuration functions
-    void ResetRnd(Int_t seed)
-    {
-        delete ran;
-        ran = new TRandom(seed);
-    }; // reset the random generator
-    void SetDriftHisto(Float_t x, Int_t = 200);
-    void SetCalculationParameters(Double_t x, Int_t y)
-    {
-        CalErr = x;
-        MaxIter = y;
-    }
+  //Configuration functions 
+  void ResetRnd(Int_t seed) {delete ran; ran=new TRandom(seed);}; // reset the random generator  
+  void SetDriftHisto(Float_t x,Int_t=200);
+  void SetCalculationParameters(Double_t x,Int_t y){CalErr=x; MaxIter=y;}
 
-    // Solving the differntial equations
-    void Declaration(Int_t);            // declaration of boundary conditions
-    Double_t kappa(int, int, int, int); // defining space charge
-    Double_t V(int, int);               // defining voltage
-    void CalField(Int_t);               // start declaration followed by solving Poisson's equation.
-    inline void CalPhyField() { CalField(0); }
-    inline void CalRamoField() { CalField(1); }
+  // Solving the differntial equations
+  void Declaration(Int_t);                 // declaration of boundary conditions
+  Double_t kappa(int ,int , int , int);    // defining space charge
+  Double_t V(int ,int);                    // defining voltage
+  void CalField(Int_t);                    // start declaration followed by solving Poisson's equation.
+  inline void CalPhyField(){CalField(0);}  
+  inline void CalRamoField(){CalField(1);}
 
-    // Calculation in case of any changes
-    void SetVoltage(Float_t x, Int_t calnow = 1)
-    {
-        Voltage = x;
-        if (calnow)
-            CalPhyField();
-    };
-    void SetNeff(TF3 *neff, Int_t calnow = 1)
-    {
-        NeffF = neff;
-        if (calnow)
-            CalPhyField();
-    };
-    void SetNeff(TH3F *neff, Int_t calnow = 1)
-    {
-        NeffH = neff;
-        if (calnow)
-            CalPhyField();
-    };
+  // Calculation in case of any changes
+  void SetVoltage(Float_t x,Int_t calnow=1) {Voltage=x; if(calnow) CalPhyField(); };
+  void SetNeff(TF3 *neff,Int_t calnow=1) {NeffF=neff; if(calnow) CalPhyField(); };
+  void SetNeff(TH3F *neff,Int_t calnow=1) {NeffH=neff; if(calnow) CalPhyField(); };
 
-    // Simulation of drift
+  // Simulation of drift
 
-    void SetEntryPoint(Float_t x, Float_t y, Float_t z)
-    {
-        enp[0] = x;
-        enp[1] = y;
-        enp[2] = z;
-    };
-    void SetExitPoint(Float_t x, Float_t y, Float_t z)
-    {
-        exp[0] = x;
-        exp[1] = y;
-        exp[2] = z;
-    };
-    void MipIR(Int_t = 20, Float_t = 0);
-    TObject *ShowMipIR(Int_t, Int_t = 14, Int_t = 1);
+  void SetEntryPoint(Float_t x, Float_t y, Float_t z) {enp[0]=x; enp[1]=y; enp[2]=z;};
+  void SetExitPoint(Float_t x, Float_t y, Float_t z) {exp[0]=x; exp[1]=y; exp[2]=z;};
+  void MipIR(Int_t=20,Float_t=0);
+  void UserIonization(Int_t, Float_t *x,Float_t *y, Float_t *z, Float_t *Q);
+  void ShowMipIR(Int_t, Int_t=14, Int_t=1);
+  void ShowUserIonization(Int_t, Float_t *, Float_t *, Float_t *, Float_t *, Int_t=14, Int_t=1);
 
-    void GaussBeam(Int_t, Float_t, Float_t, Float_t, Float_t, Float_t); //user manca
-    void ShowGaussBeam(Int_t, Float_t, Float_t, Float_t, Int_t, Int_t); //user manca
+  void GaussBeam(Int_t , Float_t , Float_t , Float_t , Float_t , Float_t); //user manca
+  void ShowGaussBeam(Int_t , Float_t , Float_t , Float_t , Int_t ,Int_t ); //user manca
 
-    void Drift(Double_t, Double_t, Double_t, Float_t, KStruct *, Double_t = 0);
-    void CalM(KStruct *seg, Double_t *data, Int_t = -1); //multiplication calculation
+  void Drift(Double_t, Double_t, Double_t, Float_t, KStruct *, Double_t = 0);
+  void CalM(KStruct *seg, Double_t *data, Int_t=-1); //multiplication calculation
 
-    // visualization
-    TH2F *Draw(Char_t *, Float_t = 1);
-    TH1F *Draw1D(Char_t *, Float_t, Int_t, Float_t);
-    // Save,read and debug
-    void Save(Char_t *, Char_t *);
-    TFile *Read(Char_t *, Char_t *);
-    void SetDebug(Short_t x) { Debug = x; };
-    // precision of drift
-    inline void SetPrecision(Double_t x) { Deps = x; };
-    inline Double_t GetPrecision() { return Deps; };
-    //______________________________________
-    //The main detector class = the basis for simulation
-    ClassDef(KDetector, 1)
+  // visualization 
+  TH2F *Draw(Char_t *, Float_t=1);
+  TH1F *Draw1D(Char_t *, Float_t ,Int_t ,Float_t );
+  // Save,read and debug
+  void  Save(Char_t *,Char_t *);
+  TFile *Read(Char_t *,Char_t *);
+  void  SetDebug(Short_t x) {Debug=x;};
+  // precision of drift
+  inline void  SetPrecision(Double_t x){Deps=x;};
+  inline Double_t   GetPrecision(){return Deps;};
+  //______________________________________ 
+  //The main detector class = the basis for simulation
+  ClassDef(KDetector,1) 
 };
 
 #endif
+
+

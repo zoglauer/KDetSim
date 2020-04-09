@@ -1,5 +1,10 @@
 #ifndef _KMaterial
 #define _KMaterial
+#ifdef MSVC
+#  define EXPORT __declspec(dllexport)
+#else
+#  define EXPORT
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -22,10 +27,10 @@
 #include "TH2.h"
 #include "TF2.h"
 
-Double_t KAlpha(Double_t, Short_t, Int_t = 0);
-Double_t KM(TH1D *, Float_t, Short_t = 1);
+Double_t EXPORT KAlpha(Double_t, Double_t, Short_t, Int_t = 0);
+Double_t EXPORT KM(TH1D *, Float_t, Short_t = 1);
 
-class KMaterial
+class EXPORT KMaterial
 {
 
 private:
@@ -42,8 +47,13 @@ public:
     static Double_t dEdx(Double_t);
     static Float_t dEX(Double_t, Double_t *, Double_t *, Double_t);
     static Float_t Perm(Int_t = 1);
+    static Float_t EmeC(Int_t);     // effective electron mass for conductivity
+    static Float_t EmhC(Int_t);     // effective hole mass for conductivity
+
     static Float_t Rho() { return 0; };
     static Int_t MobMod();
+
+
     ClassDef(KMaterial, 1)
 };
 #endif

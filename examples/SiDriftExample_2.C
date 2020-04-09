@@ -33,34 +33,34 @@
 
     // definition of votlages to be applied to the field strips
 
-    det->Voltages->Set(291);
+    det.Voltages.Set(291);
     for (int i = 0; i <= 290; i++) {
         StripPos[0] = i * 120;
-        det->Voltages[i] = -1800 + i * 6;
+        det.Voltages[i] = -1800 + i * 6;
         StripPos[1] = 299;
-        det.ElRectangle(StripPos, StripSiz, det->SetElecVolt(i), 0);
+        det.ElRectangle(StripPos, StripSiz, det.SetElecVolt(i), 0);
 
         StripPos[1] = 1;
-        det.ElRectangle(StripPos, StripSiz, det->SetElecVolt(i), 0);
+        det.ElRectangle(StripPos, StripSiz, det.SetElecVolt(i), 0);
     }
 
     //  SetUpMaterial
     for (int j = 0; j <= det.ny; j++)
         for (int i = 0; i <= det.nx; i++) {
-            det->DM->SetBinContent(i, j, 1, 0);
-            det->NeffH->SetBinContent(i, j, 1, 0.5); // very high resistivity Neff=1e11 cm-3
+            det.DM->SetBinContent(i, j, 1, 0);
+            det.NeffH->SetBinContent(i, j, 1, 0.5); // very high resistivity Neff=1e11 cm-3
         }
 
-    det->SetBoundaryConditions();
+    det.SetBoundaryConditions();
 
-    det->CalField(0);
-    det->CalField(1);
+    det.CalField(0);
+    det.CalField(1);
 
-    det->SetEntryPoint(27000, 300, 0.5);
-    det->SetExitPoint(27000, 1, 0.5);
+    det.SetEntryPoint(27000, 300, 0.5);
+    det.SetExitPoint(27000, 1, 0.5);
 
     det.SetDriftHisto(2000e-9);
     det.SetPrecision(1e-9);
-    det->diff = 1;
-    det->ShowMipIR(300);
+    det.diff = 1;
+    det.ShowMipIR(300);
 }
