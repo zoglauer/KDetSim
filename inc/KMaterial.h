@@ -1,10 +1,5 @@
 #ifndef _KMaterial
 #define _KMaterial
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -27,10 +22,15 @@
 #include "TH2.h"
 #include "TF2.h"
 
-Double_t EXPORT KAlpha(Double_t, Double_t, Short_t, Int_t = 0);
-Double_t EXPORT KM(TH1D *, Float_t, Short_t = 1);
-
-class EXPORT KMaterial
+#ifdef MSVC
+Double_t __declspec(dllexport) KAlpha(Double_t, Double_t, Short_t, Int_t = 0);
+Double_t __declspec(dllexport) KM(TH1D *, Float_t, Short_t = 1);
+class __declspec(dllexport) KMaterial
+#else
+Double_t KAlpha(Double_t, Double_t, Short_t, Int_t = 0);
+Double_t KM(TH1D *, Float_t, Short_t = 1);
+class KMaterial
+#endif
 {
 
 private:

@@ -1,17 +1,17 @@
 #ifndef _KGeometry
 #define _KGeometry
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
 
 #include "TH3I.h"
 #include "TH2F.h"
 
-TH2F EXPORT *KHisProject(void *,Int_t , Int_t);
-
-class EXPORT KGeometry {
+#ifdef MSVC
+TH2F __declspec(dllexport) *KHisProject(void *,Int_t , Int_t);
+class __declspec(dllexport) KGeometry
+#else
+TH2F *KHisProject(void *,Int_t , Int_t);
+class KGeometry
+#endif
+{
 
 private:
 public:

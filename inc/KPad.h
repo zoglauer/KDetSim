@@ -1,10 +1,6 @@
 #ifndef _KPad
 #define _KPad
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
+
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
 // KPad                                                                //
@@ -28,9 +24,15 @@
 #include "TMinuit.h"
 #include "KDetector.h"
 
-Double_t EXPORT laser(Double_t *, Double_t *);
 
-class EXPORT KPad : public KDetector {
+#ifdef MSVC
+Double_t  __declspec(dllexport) laser(Double_t *, Double_t *);
+class __declspec(dllexport) KPad : public KDetector
+#else
+Double_t laser(Double_t *, Double_t *);
+class KPad : public KDetector
+#endif
+{
 
 private:
 //Runge Kutta method for solving the field

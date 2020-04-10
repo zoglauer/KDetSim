@@ -120,8 +120,11 @@ KDetSim:  $(OBJS) $(SRCS)
 clean:     
            del /F /Q $(OBJDIR)\*
 	   del /F /Q $(SRCDIR)\*Dict.cxx
+	   del /F /Q $(SRCDIR)\*.cxx~
+	   del /F /Q examples\*.C~
 	   del /F /Q $(INCDIR)\*Dict.h
-	   del /F /Q $(LIBDIR)\KDetSim.*
+	   del /F /Q $(INCDIR)\*.h~
+#	   del /F /Q $(LIBDIR)\KDetSim.*
 	   del /F /Q  *~
 
 ################# SISIDE CLASSES #################################

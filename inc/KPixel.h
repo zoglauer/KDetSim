@@ -1,10 +1,5 @@
 #ifndef _KPixel
 #define _KPixel
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -24,7 +19,12 @@
 #include "TMinuit.h"
 #include "KDetector.h"
 
-class EXPORT KPixel : public KDetector
+
+#ifdef MSVC
+class __declspec(dllexport) KPixel : public KDetector
+#else
+class KPixel : public KDetector
+#endif
 {
 
 private:

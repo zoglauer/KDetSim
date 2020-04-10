@@ -34,3 +34,11 @@
 # CMake
 CMakeLists.txt.user*
 build*/
+
+# EMACS temporary files (added by GK 9.4.2020)
+*.*~
+
+# ROOTCompile files (added by GK 9.4.2020)
+*.manifest
+*.exp
+*_rdict.pcm

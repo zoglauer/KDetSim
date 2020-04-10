@@ -128,6 +128,7 @@ clean:
 	   del /F /Q examples\*.C~
 	   del /F /Q $(INCDIR)\*Dict.h
 	   del /F /Q $(INCDIR)\*.h~
+#	   del /F /Q $(LIBDIR)\KDetSim.*
 	   del /F /Q  *~
 
 ################# KDETSIM CLASSES #################################

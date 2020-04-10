@@ -1,10 +1,5 @@
 #ifndef _KStruct
 #define _KStruct
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -29,8 +24,15 @@
 
 #define MAXSEC 20
 
-class EXPORT KStruct {
-public:
+#ifdef MSVC
+class __declspec(dllexport) KStruct 
+#else
+class KStruct
+#endif
+
+
+{
+ public:
 Int_t PCharge;
 Int_t Steps;
 Int_t DStrip;

@@ -3,11 +3,6 @@
 
 #ifndef _KStrip
 #define _KStrip
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -19,9 +14,13 @@
 
 #include "KDetector.h"
 
-class EXPORT KStrip : public KDetector
-{
 
+#ifdef MSVC
+class  __declspec(dllexport) KStrip : public KDetector
+#else
+class KStrip : public KDetector
+#endif
+{
 private:
 public:
     Float_t Pitch;   //Strip pitch

@@ -3,11 +3,6 @@
 
 #ifndef _KImplant2D
 #define _KImplant2D
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
 
 
 #include "TMath.h"
@@ -20,7 +15,12 @@
 //                                                                      //
 //////////////////////////////////////////////////////////////////////////
 
-class EXPORT KImplant2D
+
+#ifdef MSVC
+class __declspec(dllexport) KImplant2D
+#else
+class KImplant2D
+#endif
 {
 
 private:

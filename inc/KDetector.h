@@ -1,10 +1,7 @@
 #ifndef _KDetector
 #define _KDetector
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
+
+
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
 // KDetector                                                            //
@@ -41,7 +38,12 @@
 #include "KField.h"
 #include "TVector3.h"
 
-class EXPORT KDetector : public KGeometry, public KMaterial {
+#ifdef MSVC
+class __declspec(dllexport) KDetector : public KGeometry, public KMaterial {
+#else
+class KDetector : public KGeometry, public KMaterial {
+#endif
+
 
 private:
   Double_t Deps;

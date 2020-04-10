@@ -1,10 +1,5 @@
 #ifndef _KField
 #define _KField
-#ifdef MSVC
-#  define EXPORT __declspec(dllexport)
-#else
-#  define EXPORT
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 //                                                                      //
@@ -23,9 +18,16 @@
 #include "TH2F.h"
 #include "TVector3.h"
 
-Float_t EXPORT KInterpolate2D(TH3F *, Float_t ,Float_t, Int_t=3, Int_t=1);
 
-class EXPORT KField {
+#ifdef MSVC
+Float_t __declspec(dllexport) KInterpolate2D(TH3F *, Float_t ,Float_t, Int_t=3, Int_t=1);
+class __declspec(dllexport)  KField
+#else
+Float_t KInterpolate2D(TH3F *, Float_t ,Float_t, Int_t=3, Int_t=1);
+class KField
+#endif
+
+{
 
 private:
   Int_t Method;   // Method to calculate the intermediate points
