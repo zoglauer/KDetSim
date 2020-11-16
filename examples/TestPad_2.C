@@ -19,7 +19,13 @@
 
     TCanvas c2;
     det.MipIR(200);
-    det.sum->Draw();
+    det.sum->DrawCopy();
     det.pos->Draw("SAME");
     det.neg->Draw("SAME");
+
+    TCanvas c3;
+    KElec tct;
+    tct.RCshape(40e-12,50,10000,det.sum);
+    det.sum->Draw("HIST");
+    
 }
