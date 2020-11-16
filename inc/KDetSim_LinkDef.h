@@ -14,6 +14,7 @@
 #pragma link C++ class KStrip;
 #pragma link C++ class KPixel;
 #pragma link C++ class KMesh;
+#pragma link C++ class KElec;
 #pragma link C++ class K3D;
 #pragma link C++ class KImplant3D;
 #pragma link C++ class KImplant2D;
