@@ -1,6 +1,6 @@
 #include "KMaterial.h"
 
-Double_t KM(TH1D *his, Float_t Start, Short_t Rev)
+Double_t KM(TH1D *his, Float_t T, Float_t Start, Short_t Rev)
 {
     // The derivation of the calculation can be seen in textbooks or e.g. here:
     // http://www.iue.tuwien.ac.at/phd/park/node36.html
@@ -23,21 +23,24 @@ Double_t KM(TH1D *his, Float_t Start, Short_t Rev)
 
     //  Calculate the integral in numerator
 
-    for (Int_t i = NumBin; i > sb; i--) {
-        dx = his->GetXaxis()->GetBinCenter(i) - his->GetXaxis()->GetBinCenter(i - 1);
-        EF = 0.5 * (his->GetBinContent(i) + his->GetBinContent(i - 1));
-        I1 += (KAlpha(EF, -Rev, KMaterial::ImpactIonization) - KAlpha(EF, Rev, KMaterial::ImpactIonization)) * dx;
-    }
+        for (Int_t i = 0; i < sb; i++)
+          {
+            dx = his->GetXaxis()->GetBinCenter(i+1) - his->GetXaxis()->GetBinCenter(i);
+            EF = 0.5 * (  his->GetBinContent(i+1) + his->GetBinContent(i) );
+            I1 += (KAlpha(EF, T, -Rev, KMaterial::ImpactIonization) - KAlpha(EF, T, Rev, KMaterial::ImpactIonization)) * dx;
+          }
+    
     //   Calculate the integral in denumerator
-    It = I1;
+       It = I1;
 
-    for (Int_t i = sb; i > 1; i--) {
-        dx = his->GetXaxis()->GetBinCenter(i) - his->GetXaxis()->GetBinCenter(i - 1);
-        EF = 0.5 * (his->GetBinContent(i) + his->GetBinContent(i - 1));
-        It += (KAlpha(EF, -Rev, KMaterial::ImpactIonization) - KAlpha(EF, Rev, KMaterial::ImpactIonization)) * dx;
+     for (Int_t i = sb; i < NumBin; i++)
+       {
+            dx = his->GetXaxis()->GetBinCenter(i+1) - his->GetXaxis()->GetBinCenter(i);
+            EF = 0.5 * (his->GetBinContent(i+1) + his->GetBinContent(i));
+            It += (KAlpha(EF, T, -Rev, KMaterial::ImpactIonization) - KAlpha(EF, T, Rev, KMaterial::ImpactIonization)) * dx;
 
-        I2 += KAlpha(EF, Rev, KMaterial::ImpactIonization) * TMath::Exp(It) * dx;
-    }
+            I2 += KAlpha(EF, T, Rev, KMaterial::ImpactIonization) * TMath::Exp(It) * dx;
+        }
 
     printf("I1=%f, I2=%f It=%f (dx=%e, expI1=%e)\n", I1, I2, It, dx, TMath::Exp(I1));
     return (TMath::Exp(I1) / (1 - I2));

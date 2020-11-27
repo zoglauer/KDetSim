@@ -24,11 +24,11 @@
 
 #ifdef MSVC
 Double_t __declspec(dllexport) KAlpha(Double_t, Double_t, Short_t, Int_t = 0);
-Double_t __declspec(dllexport) KM(TH1D *, Float_t, Short_t = 1);
+Double_t __declspec(dllexport) KM(TH1D *, Float_t, Float_t, Short_t = 1);
 class __declspec(dllexport) KMaterial
 #else
 Double_t KAlpha(Double_t, Double_t, Short_t, Int_t = 0);
-Double_t KM(TH1D *, Float_t, Short_t = 1);
+Double_t KM(TH1D *, Float_t, Float_t, Short_t = 1);
 class KMaterial
 #endif
 {

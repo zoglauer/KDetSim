@@ -6,8 +6,8 @@ DllSuf        = dll
 IncSuf        = h
 OutPutOpt     = /out:
  
-KDETSIM        = C:\Users\gregor\Delo\KDetSim
-DICTD         = C:/Users/gregor/Delo/KDetSim
+KDETSIM        = C:\Users\gregor\cernbox\projects\KDetSim
+DICTD         = C:/Users/gregor/cernbox/projects/KDetSim
 OBJDIR        = $(KDETSIM)\obj
 SRCDIR        = $(KDETSIM)\src
 INCDIR        = $(KDETSIM)\inc
